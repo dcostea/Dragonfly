@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Dragonfly</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="lib/bootstrap\css\bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css" />
+    <script src="lib/bootstrap\js\bootstrap.bundle.min.js"></script>
+    <script src="js/site.js" asp-append-version="true"></script>
+</head>
+<body>
+    <div class="container-fluid body-content">
+        <div class="row">
+            <div class="col-2">
+                <h5 class="m-2">input and output data models</h5>
+                <button type="button" aria-readonly="true" id="inspect_models" class="btn btn-dark m-2">See</button>
+            </div>
+            <div class="col-5">
+                <div class="form-group m-2">
+                    <textarea class="form-control textarea bg-dark text-light p-4" placeholder="ModelInput.cs" id="modelinput" rows="12"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="form-group m-2">
+                    <textarea class="form-control textarea bg-dark text-light p-4" placeholder="ModelOutput.cs" id="modeloutput" rows="12"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <h5 class="m-2">predictor</h5>
+                <button type="button" aria-readonly="true" id="inspect_predictor" class="btn btn-dark m-2">See</button>
+            </div>
+            <div class="col-10">
+                <div class="form-group m-2">
+                    <textarea class="form-control textarea bg-dark text-light p-4" placeholder="Predictor.cs" id="predictor" rows="15"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <h5 class="m-2">predictor</h5>
+                <h5 class="m-2">(using prediction engine pool)</h5>
+                <button type="button" aria-readonly="true" id="inspect_predictor_withpool" class="btn btn-dark m-2">See</button>
+            </div>
+            <div class="col-10">
+                <div class="form-group m-2">
+                    <textarea class="form-control textarea bg-dark text-light p-4" placeholder="Program.cs" id="program" rows="15"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <input type="button" id="predict" class="btn btn-danger btn-lg m-2" value="Predict" />
+            </div>
+            <div class="col-6">
+                <div class="form-group" id="features">
+                </div>
+            </div>
+            <div class="col-3">
+                <h3 id="prediction"></h3>
+            </div>
+        </div>
+
+        <!--<div class="row">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Is hidden</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Annotations</th>
+                    </tr>
+                </thead>
+                <tbody id="features">
+                </tbody>
+            </table>
+        </div>-->
+    </div>
+</body>
+</html>
+
