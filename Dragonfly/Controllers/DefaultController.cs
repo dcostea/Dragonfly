@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using GeneratedDataModels;
+using System;
 
 namespace Dragonfly.Controllers
 {
@@ -35,7 +36,8 @@ namespace Dragonfly.Controllers
         [HttpGet("modeloutput/file")]
         public IActionResult GetModelOutputSchema()
         {
-            string readText = System.IO.File.ReadAllText(@"c:\repos\Dragonfly\Dragonfly\obj\GeneratedMLNETFiles\MLCodeGenerator\MLCodeGenerator.DataModelsGenerator\ModelOutput.cs");
+            var path = $"{GetGeneratedFilesPath()}ModelOutput.cs";
+            string readText = System.IO.File.ReadAllText(path);
 
             return Ok(readText);
         }
@@ -43,7 +45,8 @@ namespace Dragonfly.Controllers
         [HttpGet("modelinput/file")]
         public IActionResult GetModelInputFile()
         {
-            string readText = System.IO.File.ReadAllText(@"c:\repos\Dragonfly\Dragonfly\obj\GeneratedMLNETFiles\MLCodeGenerator\MLCodeGenerator.DataModelsGenerator\ModelInput.cs");
+            var path = $"{GetGeneratedFilesPath()}ModelInput.cs";
+            string readText = System.IO.File.ReadAllText(path);
 
             return Ok(readText);
         }
@@ -59,7 +62,8 @@ namespace Dragonfly.Controllers
         [HttpGet("predictor/file")]
         public IActionResult GetMLPredictor()
         {
-            string readText = System.IO.File.ReadAllText(@"c:\repos\Dragonfly\Dragonfly\obj\GeneratedMLNETFiles\MLCodeGenerator\MLCodeGenerator.DataModelsGenerator\Predictor.cs");
+            var path = $"{GetGeneratedFilesPath()}Predictor.cs";
+            string readText = System.IO.File.ReadAllText(path);
 
             return Ok(readText);
         }
@@ -67,7 +71,8 @@ namespace Dragonfly.Controllers
         [HttpGet("program/file")]
         public IActionResult GetMLProgram()
         {
-            string readText = System.IO.File.ReadAllText(@"c:\repos\Dragonfly\Dragonfly\obj\GeneratedMLNETFiles\MLCodeGenerator\MLCodeGenerator.DataModelsGenerator\Program.cs");
+            var path = $"{GetGeneratedFilesPath()}Program.cs";
+            string readText = System.IO.File.ReadAllText(path);
 
             return Ok(readText);
         }
@@ -79,6 +84,14 @@ namespace Dragonfly.Controllers
             var prediction = GeneratedDataModels.Predictor.Predict(sample);
 
             return Ok(prediction);
+        }
+
+        private string GetGeneratedFilesPath()
+        {
+            var binPath = AppDomain.CurrentDomain.BaseDirectory;
+            var filePath = binPath.Substring(0, binPath.LastIndexOf("bin"));
+
+            return @$"{filePath}obj\GeneratedMLNETFiles\MLCodeGenerator\MLCodeGenerator.DataModelsGenerator\";
         }
     }
 }
