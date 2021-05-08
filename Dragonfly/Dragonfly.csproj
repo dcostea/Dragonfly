@@ -18,8 +18,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <AdditionalFiles Include="C:/Temp/MLModel0.zip" Scenario="MultiClassification" />
-    <!--<AdditionalFiles Include="C:/Temp/MLModel1.zip" Scenario="Regression" />-->
+    <!--<AdditionalFiles Include="C:/Temp/MLModel0.zip" Scenario="Regression" />-->
+    <AdditionalFiles Include="C:/Temp/MLModel1.zip" Scenario="MultiClassification" />
   </ItemGroup>
 
   <ItemGroup>

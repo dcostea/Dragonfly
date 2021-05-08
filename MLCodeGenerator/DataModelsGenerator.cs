@@ -3,8 +3,6 @@ using Microsoft.CodeAnalysis.Text;
 using MLCodeGenerator.Enums;
 using MLCodeGenerator.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,18 +33,15 @@ namespace MLCodeGenerator
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        static (Scenario?, AdditionalText) GetAdditionalFileOptions(GeneratorExecutionContext context)
+        public void Initialize(GeneratorInitializationContext context)
         {
-            var file = context.AdditionalFiles.First();
-            if (Path.GetExtension(file.Path).Equals(".zip", StringComparison.OrdinalIgnoreCase))
-            {
-                context.AnalyzerConfigOptions.GetOptions(file).TryGetValue("build_metadata.additionalfiles.Scenario", out string scenarioValue);
-                Enum.TryParse(scenarioValue, true, out Scenario scenario);
-
-                return (scenario, file);
-            }
-
-            return (null, null);
+            //#if DEBUG
+            //            if (!Debugger.IsAttached)
+            //            {
+            //                Debugger.Launch();
+            //            }
+            //#endif
+            //            Debug.WriteLine("Initalize code generator");
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -87,31 +82,20 @@ namespace MLCodeGenerator
             {
                 context.ReportDiagnostic(Diagnostic.Create(NotFoundMLNETWarning, Location.None, zipFile));
             }
-
-            Debug.WriteLine("Execute code generator");
         }
 
-        public void Initialize(GeneratorInitializationContext context)
+        private (Scenario?, AdditionalText) GetAdditionalFileOptions(GeneratorExecutionContext context)
         {
-            ////#if DEBUG
-            ////            if (!Debugger.IsAttached)
-            ////            {
-            ////                Debugger.Launch();
-            ////            }
-            ////#endif
-            ////Debug.WriteLine("Initalize code generator");
+            var file = context.AdditionalFiles.First();
+            if (Path.GetExtension(file.Path).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                context.AnalyzerConfigOptions.GetOptions(file).TryGetValue("build_metadata.additionalfiles.Scenario", out string scenarioValue);
+                Enum.TryParse(scenarioValue, true, out Scenario scenario);
 
-            //Debugger.Launch();
-            //context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+                return (scenario, file);
+            }
 
-            // Register for additional file callbacks
-            ////context.RegisterForAdditionalFileChanges(OnAdditionalFilesChanged);
+            return (null, null);
         }
-
-        ////public void OnAdditionalFilesChanged(AdditionalFilesChangedContext context)
-        ////{
-        ////    // determine which file changed, and if it affects this generator
-        ////    // regenerate only the parts that are affected by this change.
-        ////}
     }
 }

@@ -75,6 +75,7 @@ namespace Dragonfly.Controllers
         [HttpPost("predict")]
         public IActionResult Predict(ModelInput sample)
         {
+            // calling the generated Predictor class
             var prediction = GeneratedDataModels.Predictor.Predict(sample);
 
             return Ok(prediction);

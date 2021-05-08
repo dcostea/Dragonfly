@@ -11,6 +11,53 @@ namespace MLCodeGenerator.Helpers
         private const string __ = "  ";
         private const string GeneratedDataModels = nameof(GeneratedDataModels);
 
+        internal static StringBuilder PredictorBuilder(string className, string modelPath)
+        {
+            var sourceCode = new StringBuilder();
+
+            return sourceCode
+                .AppendUsing("System")
+                .AppendUsing("Microsoft.ML")
+                .Append(NamespaceWrap(PredictorClassWrap(className, modelPath), GeneratedDataModels));
+        }
+
+        internal static StringBuilder ProgramBuilder(string className, string zipPath)
+        {
+            var sourceCode = new StringBuilder();
+
+            return sourceCode
+                .AppendUsing("Microsoft.AspNetCore")
+                .AppendUsing("Microsoft.AspNetCore.Http")
+                .AppendUsing("Microsoft.AspNetCore.Hosting")
+                .AppendUsing("Microsoft.ML.Data")
+                .AppendUsing("Microsoft.Extensions.ML")
+                .AppendUsing("Microsoft.AspNetCore.Builder")
+                .AppendUsing("Microsoft.Extensions.DependencyInjection")
+                .AppendUsing("System.Text.Json")
+                .AppendUsing("System.Threading.Tasks")
+                .Append(NamespaceWrap(ProgramClassWrap(className, zipPath), GeneratedDataModels));
+        }
+
+        internal static StringBuilder ModelOutputBuilder(string className, Scenario scenario)
+        {
+            var sourceCode = new StringBuilder();
+
+            return sourceCode
+                .AppendUsing("System")
+                .AppendUsing("Microsoft.ML.Data")
+                .Append(NamespaceWrap(OutputClassWrap(className, scenario), GeneratedDataModels));
+        }
+
+        internal static StringBuilder ModelInputBuilder(IEnumerable<Feature> features, string className)
+        {
+            var sourceCode = new StringBuilder();
+
+            return sourceCode
+                .AppendUsing("System")
+                .AppendUsing("Microsoft.ML.Data")
+                .Append(NamespaceWrap(InputClassWrap(features, className), GeneratedDataModels));
+        }
+
         private static StringBuilder AppendUsing(this StringBuilder syntax, string namespaceName)
         {
             return syntax.AppendLine($"using {namespaceName};");
@@ -55,13 +102,13 @@ namespace MLCodeGenerator.Helpers
             switch (scenario)
             {
                 case Scenario.BinaryClassification:
-                    sb.AppendLine($"{__}{__}public float Score {{ get; set; }}");
+                    sb.AppendLine($"{__}{__}public float[] Score {{ get; set; }}");
                     break;
                 case Scenario.MultiClassification:
-                    sb.AppendLine($"{__}{__}public float Score {{ get; set; }}");
+                    sb.AppendLine($"{__}{__}public float[] Score {{ get; set; }}");
                     break;
                 case Scenario.Regression:
-                    sb.AppendLine($"{__}{__}public float[] Score {{ get; set; }}");
+                    sb.AppendLine($"{__}{__}public float Score {{ get; set; }}");
                     break;
                 default:
                     sb.AppendLine($"{__}{__}public float[] Score {{ get; set; }}");
@@ -84,6 +131,7 @@ namespace MLCodeGenerator.Helpers
             sb.AppendLine($@"{__}{__}{__}ITransformer model = mlContext.Model.Load(""{modelPath}"", out var modelSchema);");
             sb.AppendLine( $"{__}{__}{__}var predictor = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);");
             sb.AppendLine( $"{__}{__}{__}var predicted = predictor.Predict(sampleData);");
+            //sb.AppendLine( $"{__}{__}{__}System.Diagnostics.Debugger.Break();");
             sb.AppendLine( $"{__}{__}{__}return predicted;");
 
             sb.AppendLine($"{__}{__}}}");
@@ -129,55 +177,6 @@ namespace MLCodeGenerator.Helpers
             sb.AppendLine($"{__}}}");
 
             return sb;
-        }
-
-        internal static StringBuilder PredictorBuilder(string className, string modelPath)
-        {
-            var sourceCode = new StringBuilder();
-
-            return sourceCode
-                .AppendUsing("System")
-                .AppendUsing("Microsoft.ML")
-                .AppendUsing("Microsoft.ML.FastTree")
-                .AppendUsing("Microsoft.ML.Data")
-                .Append(NamespaceWrap(PredictorClassWrap(className, modelPath), GeneratedDataModels));
-        }
-
-        internal static StringBuilder ProgramBuilder(string className, string zipPath)
-        {
-            var sourceCode = new StringBuilder();
-
-            return sourceCode
-                .AppendUsing("Microsoft.AspNetCore")
-                .AppendUsing("Microsoft.AspNetCore.Http")
-                .AppendUsing("Microsoft.AspNetCore.Hosting")
-                .AppendUsing("Microsoft.ML.Data")
-                .AppendUsing("Microsoft.Extensions.ML")
-                .AppendUsing("Microsoft.AspNetCore.Builder")
-                .AppendUsing("Microsoft.Extensions.DependencyInjection")
-                .AppendUsing("System.Text.Json")
-                .AppendUsing("System.Threading.Tasks")
-                .Append(NamespaceWrap(ProgramClassWrap(className, zipPath), GeneratedDataModels));
-        }
-
-        internal static StringBuilder ModelOutputBuilder(string className, Scenario scenario)
-        {
-            var sourceCode = new StringBuilder();
-
-            return sourceCode
-                .AppendUsing("System")
-                .AppendUsing("Microsoft.ML.Data")
-                .Append(NamespaceWrap(OutputClassWrap(className, scenario), GeneratedDataModels));
-        }
-
-        internal static StringBuilder ModelInputBuilder(IEnumerable<Feature> features, string className)
-        {
-            var sourceCode = new StringBuilder();
-
-            return sourceCode
-                .AppendUsing("System")
-                .AppendUsing("Microsoft.ML.Data")
-                .Append(NamespaceWrap(InputClassWrap(features, className), GeneratedDataModels));
         }
     }
 }
